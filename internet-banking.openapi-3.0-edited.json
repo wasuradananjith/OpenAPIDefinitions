@@ -1,0 +1,4377 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "UzziPay - Internet Banking",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000"
+    }
+  ],
+  "paths": {
+    "/internet-banking/v1/account": {
+      "get": {
+        "tags": [
+          "Account"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountDetailsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/account/balance": {
+      "get": {
+        "tags": [
+          "Account"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/account/balances": {
+      "get": {
+        "tags": [
+          "Account"
+        ],
+        "parameters": [
+          {
+            "name": "initialDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "finalDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BalancePeriodResponse"
+                  },
+                  "nullable": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/auth/pin/validate": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidatePinRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatePinResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/auth/pin/resend": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResendPinRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResendPinResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/auth/transaction/pin": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionPinRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionPinResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/auth/logout": {
+      "delete": {
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/boleto/collection": {
+      "post": {
+        "tags": [
+          "Boleto"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveBoletoCollectionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoletoCreateCollectionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/boleto/{barcode}": {
+      "get": {
+        "tags": [
+          "Boleto"
+        ],
+        "parameters": [
+          {
+            "name": "barcode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDetailsBoletoResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/boleto/{id}/statement": {
+      "get": {
+        "tags": [
+          "Boleto"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReceiptResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/boleto/{id}": {
+      "delete": {
+        "tags": [
+          "Boleto"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoletoApprovationRemoveResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/boleto/{paymentOrderId}/change-status/{status}": {
+      "put": {
+        "tags": [
+          "Boleto"
+        ],
+        "parameters": [
+          {
+            "name": "paymentOrderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "status",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/PaymentOrderStatus"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/boleto/{paymentOrderId}/info": {
+      "get": {
+        "tags": [
+          "Boleto"
+        ],
+        "parameters": [
+          {
+            "name": "paymentOrderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoletoPaymentOrderInfoResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/boleto/{paymentOrderId}/list": {
+      "get": {
+        "tags": [
+          "Boleto"
+        ],
+        "parameters": [
+          {
+            "name": "paymentOrderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoletoBoletoSearchResponseSearchResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/boleto/{id}/pdf/url": {
+      "get": {
+        "tags": [
+          "BoletoDownloadPdf"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UrlResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/boleto/{id}/pdf": {
+      "get": {
+        "tags": [
+          "BoletoDownloadPdf"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/boletogroup/{id}": {
+      "get": {
+        "tags": [
+          "BoletoGroup"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetailsPaymentOrderBoletoResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "BoletoGroup"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/boletogroup/{id}/change-status/{status}": {
+      "put": {
+        "tags": [
+          "BoletoGroup"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "status",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/PaymentOrderStatus"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/boletogroup": {
+      "get": {
+        "tags": [
+          "BoletoGroup"
+        ],
+        "parameters": [
+          {
+            "name": "Status",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PaymentOrderStatus"
+              },
+              "nullable": true
+            }
+          },
+          {
+            "name": "ProductType",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/ProductTypeNullable"
+            }
+          },
+          {
+            "name": "InitialSendDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "nullable": true
+            }
+          },
+          {
+            "name": "FinalSendDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "nullable": true
+            }
+          },
+          {
+            "name": "PageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentOrderBoletoGroupResponseSearchResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/registration/company": {
+      "get": {
+        "tags": [
+          "Company"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/registration/company/documents": {
+      "get": {
+        "tags": [
+          "Company"
+        ],
+        "parameters": [
+          {
+            "name": "types",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/DocumentType"
+              },
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DocumentResponse"
+                  },
+                  "nullable": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Company"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "documentType": {
+                    "$ref": "#/components/schemas/DocumentType"
+                  },
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "documentType": {
+                  "contentType": "application/json"
+                },
+                "file": {
+                  "contentType": "application/json"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentFileResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/deposit/boleto": {
+      "post": {
+        "tags": [
+          "DepositBoleto"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DepositBoletoRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DepositBoletoResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/deposit/boleto/search": {
+      "get": {
+        "tags": [
+          "DepositBoleto"
+        ],
+        "parameters": [
+          {
+            "name": "InitialDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "FinalDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "PageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchDepositBoletoResultSearchDepositBoletoResponseSearchResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/deposit/boleto/pdf/url": {
+      "post": {
+        "tags": [
+          "DepositBoletoPdfDownload"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DownloadBoletoDepositRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UrlResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/deposit/boleto/pdf": {
+      "get": {
+        "tags": [
+          "DepositBoletoPdfDownload"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/registration/document": {
+      "get": {
+        "tags": [
+          "Document"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/account/operation/list": {
+      "get": {
+        "tags": [
+          "Operation"
+        ],
+        "parameters": [
+          {
+            "name": "initialDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "finalDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "includePreviousBalance",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "orderDirection",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/ListSortDirectionNullable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceStatementsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/account/operation/statement": {
+      "get": {
+        "tags": [
+          "Operation"
+        ],
+        "parameters": [
+          {
+            "name": "when",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "transactionId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationStatementResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/account/operation/pdf/url": {
+      "post": {
+        "tags": [
+          "OperationPdfDownload"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StatementPdfRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UrlResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/account/operation/pdf": {
+      "get": {
+        "tags": [
+          "OperationPdfDownload"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/payroll/excel": {
+      "post": {
+        "tags": [
+          "Payroll"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "paymentDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "purposeId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "paymentDate": {
+                  "contentType": "application/json"
+                },
+                "purposeId": {
+                  "contentType": "application/json"
+                },
+                "file": {
+                  "contentType": "application/json"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/payroll/{id}/statement": {
+      "get": {
+        "tags": [
+          "Payroll"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayrollReceiptResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/payroll/{paymentOrderId}/approve/summary": {
+      "get": {
+        "tags": [
+          "Payroll"
+        ],
+        "parameters": [
+          {
+            "name": "paymentOrderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SummaryApproveResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/payroll/{paymentOrderId}/errors/summary": {
+      "get": {
+        "tags": [
+          "Payroll"
+        ],
+        "parameters": [
+          {
+            "name": "paymentOrderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SummaryErrorsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/payroll/{paymentOrderId}/list": {
+      "get": {
+        "tags": [
+          "Payroll"
+        ],
+        "parameters": [
+          {
+            "name": "paymentOrderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchListResultPayrollSearchListResponseSearchResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/payroll/{paymentOrderId}/errors/list": {
+      "get": {
+        "tags": [
+          "Payroll"
+        ],
+        "parameters": [
+          {
+            "name": "paymentOrderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LineErrorResultLineErrorResultSearchResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/payroll/{id}/pdf/url": {
+      "get": {
+        "tags": [
+          "PayrollDownloadPdf"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UrlResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/payroll/{id}/pdf": {
+      "get": {
+        "tags": [
+          "PayrollDownloadPdf"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/payroll/excel/samples/url": {
+      "get": {
+        "tags": [
+          "PayrollExcelSample"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UrlResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/payroll/excel/samples/download": {
+      "get": {
+        "tags": [
+          "PayrollExcelSample"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/registration/procurator/list": {
+      "get": {
+        "tags": [
+          "Procurator"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProcuratorSearchResponse"
+                  },
+                  "nullable": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/registration/procurator/{id}": {
+      "get": {
+        "tags": [
+          "Procurator"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetailsRepresentativeResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Procurator"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProcuratorSaveRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Procurator"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/internet-banking/v1/registration/procurator": {
+      "post": {
+        "tags": [
+          "Procurator"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProcuratorSaveRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/registration/procurator/{id}/documents": {
+      "get": {
+        "tags": [
+          "Procurator"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "types",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/DocumentType"
+              },
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DocumentResponse"
+                  },
+                  "nullable": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Procurator"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "documentType": {
+                    "$ref": "#/components/schemas/DocumentType"
+                  },
+                  "personalDocumentType": {
+                    "$ref": "#/components/schemas/PersonalDocumentType"
+                  },
+                  "fileSide": {
+                    "$ref": "#/components/schemas/FileSideType"
+                  },
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "documentType": {
+                  "contentType": "application/json"
+                },
+                "personalDocumentType": {
+                  "contentType": "application/json"
+                },
+                "fileSide": {
+                  "contentType": "application/json"
+                },
+                "file": {
+                  "contentType": "application/json"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentFileResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/purpose": {
+      "get": {
+        "tags": [
+          "Purpose"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IdNameResponse"
+                  },
+                  "nullable": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/registration/representative/list": {
+      "get": {
+        "tags": [
+          "Representative"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RepresentativeSearchResponse"
+                  },
+                  "nullable": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/registration/representative/{id}": {
+      "get": {
+        "tags": [
+          "Representative"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetailsRepresentativeResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Representative"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RepresentativeSaveRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Representative"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/internet-banking/v1/registration/representative": {
+      "post": {
+        "tags": [
+          "Representative"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RepresentativeSaveRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/registration/representative/{id}/documents": {
+      "get": {
+        "tags": [
+          "Representative"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "types",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/DocumentType"
+              },
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DocumentResponse"
+                  },
+                  "nullable": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Representative"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "documentType": {
+                    "$ref": "#/components/schemas/DocumentType"
+                  },
+                  "personalDocumentType": {
+                    "$ref": "#/components/schemas/PersonalDocumentType"
+                  },
+                  "fileSide": {
+                    "$ref": "#/components/schemas/FileSideType"
+                  },
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "documentType": {
+                  "contentType": "application/json"
+                },
+                "personalDocumentType": {
+                  "contentType": "application/json"
+                },
+                "fileSide": {
+                  "contentType": "application/json"
+                },
+                "file": {
+                  "contentType": "application/json"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentFileResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/transfer/account/prepare": {
+      "post": {
+        "tags": [
+          "Transfer"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PrepareTransferAccountRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrepareTransferAccountResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/transfer/account/complete/{transferId}": {
+      "post": {
+        "tags": [
+          "Transfer"
+        ],
+        "parameters": [
+          {
+            "name": "transferId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompleteTransferAccountResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/transfer/account/{transactionId}/statement": {
+      "get": {
+        "tags": [
+          "Transfer"
+        ],
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "transferDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransferAccountStatementResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/transfer/bank": {
+      "post": {
+        "tags": [
+          "Transfer"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransferBankRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransferBankResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/transfer/bank/{transactionId}/statement": {
+      "get": {
+        "tags": [
+          "Transfer"
+        ],
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransferBankStatementResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/transfer/{transactionId}/pdf/url": {
+      "get": {
+        "tags": [
+          "TransferDownloadPdf"
+        ],
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "transferDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UrlResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/transfer/{transactionId}/pdf": {
+      "get": {
+        "tags": [
+          "TransferDownloadPdf"
+        ],
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/transfer/bank/{transactionId}/pdf/url": {
+      "get": {
+        "tags": [
+          "TransferDownloadPdf"
+        ],
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UrlResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internet-banking/v1/payment/transfer/bank/{transactionId}/pdf": {
+      "get": {
+        "tags": [
+          "TransferDownloadPdf"
+        ],
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CompanyStatusType": {
+        "enum": [
+          "None",
+          "Pending",
+          "UnderReview",
+          "Approved",
+          "Reproved"
+        ],
+        "type": "string"
+      },
+      "AccountDetailsResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountBranch": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "balanceValue": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "currentStatus": {
+            "$ref": "#/components/schemas/CompanyStatusType"
+          }
+        },
+        "nullable": true
+      },
+      "BalanceResponse": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "nullable": true
+      },
+      "BalancePeriodResponse": {
+        "required": [
+          "availableBalance",
+          "date"
+        ],
+        "type": "object",
+        "properties": {
+          "availableBalance": {
+            "type": "number",
+            "format": "double"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "nullable": true
+      },
+      "LoginRequest": {
+        "required": [
+          "document",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "document": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "nullable": true
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "nullable": true
+      },
+      "ValidatePinRequest": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "pin": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "ValidatePinResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "ResendPinRequest": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "nullable": true
+      },
+      "ResendPinResponse": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "TransactionPinRequest": {
+        "required": [
+          "transactionId"
+        ],
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string"
+          }
+        },
+        "nullable": true
+      },
+      "TransactionPinResponse": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "nullable": true
+      },
+      "BoletoSaveRequest": {
+        "required": [
+          "barCode",
+          "consolidatedAmount",
+          "discount",
+          "fine",
+          "interest",
+          "totalAmount"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "barCode": {
+            "type": "string"
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "interest": {
+            "type": "number",
+            "format": "double"
+          },
+          "fine": {
+            "type": "number",
+            "format": "double"
+          },
+          "discount": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "consolidatedAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "recipientName": {
+            "maxLength": 150,
+            "type": "string",
+            "nullable": true
+          },
+          "recipientTaxId": {
+            "maxLength": 30,
+            "type": "string",
+            "nullable": true
+          },
+          "typeableLine": {
+            "maxLength": 50,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "SaveBoletoCollectionRequest": {
+        "type": "object",
+        "properties": {
+          "paymentDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "schedule": {
+            "type": "boolean"
+          },
+          "boletos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BoletoSaveRequest"
+            },
+            "nullable": true
+          },
+          "useDueDateExpired": {
+            "type": "boolean"
+          }
+        },
+        "nullable": true
+      },
+      "BoletoCreateCollectionResponse": {
+        "type": "object",
+        "properties": {
+          "paymentOrderId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "scheduled": {
+            "type": "boolean"
+          }
+        },
+        "nullable": true
+      },
+      "PaymentDetailsResponse": {
+        "type": "object",
+        "properties": {
+          "barcode": {
+            "type": "string",
+            "nullable": true
+          },
+          "typeableLine": {
+            "type": "string",
+            "nullable": true
+          },
+          "dueDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "interest": {
+            "type": "number",
+            "format": "double"
+          },
+          "fine": {
+            "type": "number",
+            "format": "double"
+          },
+          "discount": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "minimumAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "maximumAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "consolidatedAmount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "nullable": true
+      },
+      "TaxIdentifierResponse": {
+        "type": "object",
+        "properties": {
+          "taxId": {
+            "type": "string",
+            "nullable": true
+          },
+          "country": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "BeneficiaryResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "taxIdentifier": {
+            "$ref": "#/components/schemas/TaxIdentifierResponse"
+          }
+        },
+        "nullable": true
+      },
+      "DraweeResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "taxIdentifier": {
+            "$ref": "#/components/schemas/TaxIdentifierResponse"
+          }
+        },
+        "nullable": true
+      },
+      "GetDetailsBoletoResponse": {
+        "type": "object",
+        "properties": {
+          "paymentDetails": {
+            "$ref": "#/components/schemas/PaymentDetailsResponse"
+          },
+          "beneficiary": {
+            "$ref": "#/components/schemas/BeneficiaryResponse"
+          },
+          "drawee": {
+            "$ref": "#/components/schemas/DraweeResponse"
+          }
+        },
+        "nullable": true
+      },
+      "BoletoStatus": {
+        "enum": [
+          "Created",
+          "Processing",
+          "Paid",
+          "Error",
+          "Removed",
+          "Schedule",
+          "Canceled"
+        ],
+        "type": "string"
+      },
+      "BoletoInfoResponse": {
+        "type": "object",
+        "properties": {
+          "boletoId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "boletoGroupId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "receiptName": {
+            "type": "string",
+            "nullable": true
+          },
+          "recipientTaxId": {
+            "type": "string",
+            "nullable": true
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BoletoStatus"
+          },
+          "statusDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "interest": {
+            "type": "number",
+            "format": "double"
+          },
+          "fine": {
+            "type": "number",
+            "format": "double"
+          },
+          "discount": {
+            "type": "number",
+            "format": "double"
+          },
+          "consolidatedAmout": {
+            "type": "number",
+            "format": "double"
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "typeableLine": {
+            "type": "string",
+            "nullable": true
+          },
+          "messageError": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "StatementResponse": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "transactionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "consolidatedAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "entryDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "creditDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "taxIdentifierId": {
+            "type": "string",
+            "nullable": true
+          },
+          "taxIdentifierName": {
+            "type": "string",
+            "nullable": true
+          },
+          "historyCode": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "nullable": true
+      },
+      "ReceiptResponse": {
+        "type": "object",
+        "properties": {
+          "boleto": {
+            "$ref": "#/components/schemas/BoletoInfoResponse"
+          },
+          "statement": {
+            "$ref": "#/components/schemas/StatementResponse"
+          }
+        },
+        "nullable": true
+      },
+      "BoletoApprovationRemoveResponse": {
+        "type": "object",
+        "properties": {
+          "canceledOrder": {
+            "type": "boolean"
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "nullable": true
+      },
+      "PaymentOrderStatus": {
+        "enum": [
+          "Approved",
+          "Completed",
+          "Processing",
+          "SchedulingPendingApproval",
+          "Canceled",
+          "PaymentPendingApproval"
+        ],
+        "type": "string"
+      },
+      "PaymentOrderStatusNullable": {
+        "enum": [
+          "Approved",
+          "Completed",
+          "Processing",
+          "SchedulingPendingApproval",
+          "Canceled",
+          "PaymentPendingApproval"
+        ],
+        "type": "string",
+        "nullable": true
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "fullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountBranch": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "BoletoPaymentOrderInfoResponse": {
+        "type": "object",
+        "properties": {
+          "paymentOrderId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "productName": {
+            "type": "string",
+            "nullable": true
+          },
+          "sentAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "paidAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/PaymentOrderStatusNullable"
+          },
+          "totalPaymentAccounts": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalPaid": {
+            "type": "number",
+            "format": "double"
+          },
+          "creator": {
+            "$ref": "#/components/schemas/UserResponse"
+          },
+          "scheduleApprover": {
+            "$ref": "#/components/schemas/UserResponse"
+          }
+        },
+        "nullable": true
+      },
+      "BoletoStatusNullable": {
+        "enum": [
+          "Created",
+          "Processing",
+          "Paid",
+          "Error",
+          "Removed",
+          "Schedule",
+          "Canceled"
+        ],
+        "type": "string",
+        "nullable": true
+      },
+      "BoletoSearchResponse": {
+        "type": "object",
+        "properties": {
+          "boletoId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "employeeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BoletoStatusNullable"
+          }
+        },
+        "nullable": true
+      },
+      "BoletoBoletoSearchResponseSearchResponse": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BoletoSearchResponse"
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "nullable": true
+      },
+      "UrlResponse": {
+        "required": [
+          "url"
+        ],
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "readOnly": true
+          }
+        },
+        "nullable": true
+      },
+      "ProductType": {
+        "enum": [
+          "BoletoConvenio",
+          "CNAB240",
+          "SimplePayroll"
+        ],
+        "type": "string"
+      },
+      "DetailsPaymentOrderBoletoResponse": {
+        "type": "object",
+        "properties": {
+          "boletoGroupId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sendDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "paymentDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "fileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "quantityRegister": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fileSizeKB": {
+            "type": "number",
+            "format": "double"
+          },
+          "status": {
+            "$ref": "#/components/schemas/PaymentOrderStatus"
+          },
+          "observation": {
+            "type": "string",
+            "nullable": true
+          },
+          "productType": {
+            "$ref": "#/components/schemas/ProductType"
+          },
+          "totalValueGroup": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalValuePaid": {
+            "type": "number",
+            "format": "double"
+          },
+          "paymentApprover": {
+            "$ref": "#/components/schemas/UserResponse"
+          },
+          "scheduleApprover": {
+            "$ref": "#/components/schemas/UserResponse"
+          },
+          "paymentRepprover": {
+            "$ref": "#/components/schemas/UserResponse"
+          },
+          "scheduleRepprover": {
+            "$ref": "#/components/schemas/UserResponse"
+          },
+          "canceler": {
+            "$ref": "#/components/schemas/UserResponse"
+          },
+          "creator": {
+            "$ref": "#/components/schemas/UserResponse"
+          },
+          "boletos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BoletoInfoResponse"
+            },
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "ProductTypeNullable": {
+        "enum": [
+          "BoletoConvenio",
+          "CNAB240",
+          "SimplePayroll"
+        ],
+        "type": "string",
+        "nullable": true
+      },
+      "BoletoGroupResponse": {
+        "type": "object",
+        "properties": {
+          "boletoGroupId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sendDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "paymentDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "fileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "quantityRegister": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fileSizeKB": {
+            "type": "number",
+            "format": "double"
+          },
+          "status": {
+            "$ref": "#/components/schemas/PaymentOrderStatus"
+          },
+          "observation": {
+            "type": "string",
+            "nullable": true
+          },
+          "productType": {
+            "$ref": "#/components/schemas/ProductType"
+          },
+          "totalValueGroup": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalValuePaid": {
+            "type": "number",
+            "format": "double"
+          },
+          "userApprovedSchedule": {
+            "type": "string",
+            "nullable": true
+          },
+          "userApprovedPayment": {
+            "type": "string",
+            "nullable": true
+          },
+          "creator": {
+            "$ref": "#/components/schemas/UserResponse"
+          },
+          "boletos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BoletoInfoResponse"
+            },
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "PaymentOrderBoletoGroupResponseSearchResponse": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BoletoGroupResponse"
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "nullable": true
+      },
+      "ContactResponse": {
+        "type": "object",
+        "properties": {
+          "zipCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "streatNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "complement": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "neighborhood": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "CompanyResponse": {
+        "type": "object",
+        "properties": {
+          "cnpj": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "contact": {
+            "$ref": "#/components/schemas/ContactResponse"
+          }
+        },
+        "nullable": true
+      },
+      "DocumentType": {
+        "enum": [
+          "None",
+          "ArticlesOfIncorporation",
+          "AmendmentOfTheArticlesOfIncorporation",
+          "ProofOfAddress",
+          "PersonIdentity",
+          "Procuration"
+        ],
+        "type": "string"
+      },
+      "PersonalDocumentType": {
+        "enum": [
+          "None",
+          "Cnh",
+          "Rg"
+        ],
+        "type": "string"
+      },
+      "DocumentStatusType": {
+        "enum": [
+          "None",
+          "Pending",
+          "UnderReview",
+          "Approved",
+          "Reproved"
+        ],
+        "type": "string"
+      },
+      "FileSideType": {
+        "enum": [
+          "None",
+          "Full",
+          "Front",
+          "Back"
+        ],
+        "type": "string"
+      },
+      "DocumentFileResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "contentType": {
+            "type": "string",
+            "nullable": true
+          },
+          "side": {
+            "$ref": "#/components/schemas/FileSideType"
+          },
+          "sentAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "nullable": true
+      },
+      "DocumentResponse": {
+        "type": "object",
+        "properties": {
+          "documentType": {
+            "$ref": "#/components/schemas/DocumentType"
+          },
+          "personalDocumentType": {
+            "$ref": "#/components/schemas/PersonalDocumentType"
+          },
+          "status": {
+            "$ref": "#/components/schemas/DocumentStatusType"
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DocumentFileResponse"
+            },
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "DepositBoletoRequest": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "nullable": true
+      },
+      "StatusDepositBoletoType": {
+        "enum": [
+          "Created",
+          "Overdue",
+          "Paid",
+          "Undefined"
+        ],
+        "type": "string"
+      },
+      "DepositBoletoResponse": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "typeableLine": {
+            "type": "string",
+            "nullable": true
+          },
+          "externalIdentifier": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "$ref": "#/components/schemas/StatusDepositBoletoType"
+          }
+        },
+        "nullable": true
+      },
+      "SearchDepositBoletoResponse": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "typeableLine": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/StatusDepositBoletoType"
+          },
+          "transactionDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "nullable": true
+      },
+      "SearchDepositBoletoResultSearchDepositBoletoResponseSearchResponse": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SearchDepositBoletoResponse"
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "nullable": true
+      },
+      "DownloadBoletoDepositRequest": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "transactionDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "nullable": true
+      },
+      "ListSortDirectionNullable": {
+        "enum": [
+          "Ascending",
+          "Descending"
+        ],
+        "type": "string",
+        "nullable": true
+      },
+      "BalancePeriodResult": {
+        "type": "object",
+        "properties": {
+          "availableBalance": {
+            "type": "number",
+            "format": "double"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "nullable": true
+      },
+      "ReceiptType": {
+        "enum": [
+          "Default",
+          "AccountTransference",
+          "BankTransference"
+        ],
+        "type": "string"
+      },
+      "OperationResponse": {
+        "type": "object",
+        "properties": {
+          "creditDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "entryDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "transactionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "senderName": {
+            "type": "string",
+            "nullable": true
+          },
+          "senderAccountBranch": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "senderAccountNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "uzziBankCNPJ": {
+            "type": "string",
+            "nullable": true
+          },
+          "recipientName": {
+            "type": "string",
+            "nullable": true
+          },
+          "receiptType": {
+            "$ref": "#/components/schemas/ReceiptType"
+          }
+        },
+        "nullable": true
+      },
+      "OperationResponseSearchResult": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OperationResponse"
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "nullable": true
+      },
+      "BalanceStatementsResponse": {
+        "type": "object",
+        "properties": {
+          "balanceInitialDate": {
+            "$ref": "#/components/schemas/BalancePeriodResult"
+          },
+          "balanceFinallDate": {
+            "$ref": "#/components/schemas/BalancePeriodResult"
+          },
+          "operations": {
+            "$ref": "#/components/schemas/OperationResponseSearchResult"
+          }
+        },
+        "nullable": true
+      },
+      "OperationStatementResponse": {
+        "type": "object",
+        "properties": {
+          "when": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "transactionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "senderName": {
+            "type": "string",
+            "nullable": true
+          },
+          "senderAccountBranch": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "senderAccountNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "uzziBankCNPJ": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "StatementPdfRequest": {
+        "type": "object",
+        "properties": {
+          "creditDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "entryDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "transactionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "senderName": {
+            "type": "string",
+            "nullable": true
+          },
+          "companyAccountBranch": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "companyAccountNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "uzziBankCNPJ": {
+            "type": "string",
+            "nullable": true
+          },
+          "recipientName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "PayrollReceiptResponse": {
+        "type": "object",
+        "properties": {
+          "payrollId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "companyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "companyTaxId": {
+            "type": "string",
+            "nullable": true
+          },
+          "companyAccountBranch": {
+            "type": "string",
+            "nullable": true
+          },
+          "companyAccountNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "statement": {
+            "$ref": "#/components/schemas/StatementResponse"
+          },
+          "drawerAccountNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "drawerAccountBranch": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "SummaryApproveResponse": {
+        "type": "object",
+        "properties": {
+          "paymentOrderId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "sentAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "paidAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/PaymentOrderStatus"
+          },
+          "totalEmployees": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "creator": {
+            "$ref": "#/components/schemas/UserResponse"
+          },
+          "paymentApprover": {
+            "$ref": "#/components/schemas/UserResponse"
+          },
+          "scheduleApprover": {
+            "$ref": "#/components/schemas/UserResponse"
+          },
+          "paymentRepprover": {
+            "$ref": "#/components/schemas/UserResponse"
+          },
+          "scheduleRepprover": {
+            "$ref": "#/components/schemas/UserResponse"
+          },
+          "canceler": {
+            "$ref": "#/components/schemas/UserResponse"
+          },
+          "totalPaid": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "processedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "nullable": true
+      },
+      "SummaryErrorsResponse": {
+        "type": "object",
+        "properties": {
+          "filename": {
+            "type": "string",
+            "nullable": true
+          },
+          "sentAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "totalRecords": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "countErrors": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "creator": {
+            "$ref": "#/components/schemas/UserResponse"
+          }
+        },
+        "nullable": true
+      },
+      "PayrollStatus": {
+        "enum": [
+          "Schedule",
+          "Processing",
+          "Paid",
+          "Error",
+          "Created",
+          "Canceled"
+        ],
+        "type": "string"
+      },
+      "EmployeeResponse": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "personalDocument": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountBranch": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountNumber": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "PayrollSearchListResponse": {
+        "type": "object",
+        "properties": {
+          "payrollId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "paymentOrderId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "status": {
+            "$ref": "#/components/schemas/PayrollStatus"
+          },
+          "fileLine": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "employee": {
+            "$ref": "#/components/schemas/EmployeeResponse"
+          }
+        },
+        "nullable": true
+      },
+      "SearchListResultPayrollSearchListResponseSearchResponse": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PayrollSearchListResponse"
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "nullable": true
+      },
+      "LineErrorResult": {
+        "type": "object",
+        "properties": {
+          "line": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "employeeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "paymentDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "LineErrorResultLineErrorResultSearchResponse": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LineErrorResult"
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "nullable": true
+      },
+      "ProcuratorSearchResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userFullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "cpf": {
+            "type": "string",
+            "nullable": true
+          },
+          "identificationDocumentStatus": {
+            "$ref": "#/components/schemas/DocumentStatusType"
+          },
+          "proofOfResidenceStatus": {
+            "$ref": "#/components/schemas/DocumentStatusType"
+          },
+          "procurationStatus": {
+            "$ref": "#/components/schemas/DocumentStatusType"
+          }
+        },
+        "nullable": true
+      },
+      "DetailsRepresentativeResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "fullname": {
+            "type": "string",
+            "nullable": true
+          },
+          "cpf": {
+            "type": "string",
+            "nullable": true
+          },
+          "rg": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "birthdate": {
+            "type": "string",
+            "nullable": true
+          },
+          "complement": {
+            "type": "string",
+            "nullable": true
+          },
+          "neighborhood": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "mothersName": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "type": "string",
+            "nullable": true
+          },
+          "streetNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "zipCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "cellphone": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "ProcuratorSaveRequest": {
+        "required": [
+          "address",
+          "birthdate",
+          "cellphone",
+          "city",
+          "cpf",
+          "email",
+          "fullname",
+          "mothersName",
+          "neighborhood",
+          "state",
+          "streetNumber",
+          "zipCode"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "fullname": {
+            "type": "string"
+          },
+          "cpf": {
+            "type": "string"
+          },
+          "birthdate": {
+            "type": "string"
+          },
+          "mothersName": {
+            "type": "string"
+          },
+          "zipCode": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "streetNumber": {
+            "type": "string"
+          },
+          "complement": {
+            "type": "string",
+            "nullable": true
+          },
+          "neighborhood": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "state": {
+            "maxLength": 2,
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "cellphone": {
+            "minLength": 11,
+            "type": "string"
+          }
+        },
+        "nullable": true
+      },
+      "IdNameResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "RepresentativeSearchResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userFullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "cpf": {
+            "type": "string",
+            "nullable": true
+          },
+          "identificationDocumentStatus": {
+            "$ref": "#/components/schemas/DocumentStatusType"
+          },
+          "proofOfResidenceStatus": {
+            "$ref": "#/components/schemas/DocumentStatusType"
+          }
+        },
+        "nullable": true
+      },
+      "RepresentativeSaveRequest": {
+        "required": [
+          "address",
+          "birthdate",
+          "cellphone",
+          "city",
+          "cpf",
+          "email",
+          "fullname",
+          "mothersName",
+          "neighborhood",
+          "state",
+          "streetNumber",
+          "zipCode"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "fullname": {
+            "type": "string"
+          },
+          "cpf": {
+            "type": "string"
+          },
+          "birthdate": {
+            "type": "string"
+          },
+          "mothersName": {
+            "type": "string"
+          },
+          "zipCode": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "streetNumber": {
+            "type": "string"
+          },
+          "complement": {
+            "type": "string",
+            "nullable": true
+          },
+          "neighborhood": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "state": {
+            "maxLength": 2,
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "cellphone": {
+            "minLength": 11,
+            "type": "string"
+          }
+        },
+        "nullable": true
+      },
+      "PrepareTransferAccountRequest": {
+        "required": [
+          "amount",
+          "document"
+        ],
+        "type": "object",
+        "properties": {
+          "document": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "PrepareTransferAccountResponse": {
+        "type": "object",
+        "properties": {
+          "clientName": {
+            "type": "string",
+            "nullable": true
+          },
+          "transferId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "nullable": true
+      },
+      "CompleteTransferAccountResponse": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "TransferAccountStatementResponse": {
+        "type": "object",
+        "properties": {
+          "transferId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "transactionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "paidAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "processorDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "payer": {
+            "$ref": "#/components/schemas/UserResponse"
+          },
+          "beneficiaryName": {
+            "type": "string",
+            "nullable": true
+          },
+          "beneficiaryDocument": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "companyDocument": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "TransferBankRequest": {
+        "type": "object",
+        "properties": {
+          "destinationBankCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "destinationAccountBranch": {
+            "type": "string",
+            "nullable": true
+          },
+          "destinationAccountNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "destinationAccountDV": {
+            "type": "string",
+            "nullable": true
+          },
+          "personalDocument": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountType": {
+            "type": "string",
+            "nullable": true
+          },
+          "destinationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "transferIdentification": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "TransferBankResponse": {
+        "required": [
+          "externalIdentifier",
+          "status",
+          "transactionId",
+          "transferId"
+        ],
+        "type": "object",
+        "properties": {
+          "externalIdentifier": {
+            "type": "string"
+          },
+          "transactionId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "transferId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "nullable": true
+      },
+      "TransferPersonResponse": {
+        "type": "object",
+        "properties": {
+          "accountBranch": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "taxId": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountType": {
+            "type": "string",
+            "nullable": true
+          },
+          "bankCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "TransferBankStatementResponse": {
+        "type": "object",
+        "properties": {
+          "transferDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "processDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "transferIdentification": {
+            "type": "string",
+            "nullable": true
+          },
+          "transactionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "cnpjUzibank": {
+            "type": "string",
+            "nullable": true
+          },
+          "sender": {
+            "$ref": "#/components/schemas/TransferPersonResponse"
+          },
+          "destination": {
+            "$ref": "#/components/schemas/TransferPersonResponse"
+          }
+        },
+        "nullable": true
+      }
+    },
+    "securitySchemes": {
+      "AuthScheme": {
+        "type": "apiKey",
+        "description": "Standard Authorization header without scheme. Example: \"{token}\"",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  },
+  "security": [
+    {
+      "AuthScheme": []
+    }
+  ]
+}

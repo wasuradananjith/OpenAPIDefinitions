@@ -1,0 +1,1036 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "micado_backend",
+    "version": "1.0.0",
+    "description": "code",
+    "contact": {}
+  },
+  "paths": {
+    "/consent/{tenant}/{principal}": {
+      "get": {
+        "x-controller-name": "IdentityproxyController",
+        "x-operation-name": "consent",
+        "tags": [
+          "IdentityproxyController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Return value of IdentityproxyController.consent"
+          }
+        },
+        "parameters": [
+          {
+            "name": "tenant",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "principal",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "IdentityproxyController.consent"
+      }
+    },
+    "/features-flags/count": {
+      "get": {
+        "x-controller-name": "FeaturesFlagsController",
+        "x-operation-name": "count",
+        "tags": [
+          "FeaturesFlagsController"
+        ],
+        "responses": {
+          "200": {
+            "description": "FeaturesFlags count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "FeaturesFlags.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<FeaturesFlags>"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "FeaturesFlagsController.count"
+      }
+    },
+    "/features-flags/{id}": {
+      "put": {
+        "x-controller-name": "FeaturesFlagsController",
+        "x-operation-name": "replaceById",
+        "tags": [
+          "FeaturesFlagsController"
+        ],
+        "responses": {
+          "204": {
+            "description": "FeaturesFlags was updated"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeaturesFlags"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "FeaturesFlagsController.replaceById"
+      },
+      "patch": {
+        "x-controller-name": "FeaturesFlagsController",
+        "x-operation-name": "updateById",
+        "tags": [
+          "FeaturesFlagsController"
+        ],
+        "responses": {
+          "204": {
+            "description": "FeaturesFlags was updated"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeaturesFlagsPartial"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "FeaturesFlagsController.updateById"
+      },
+      "get": {
+        "x-controller-name": "FeaturesFlagsController",
+        "x-operation-name": "findById",
+        "tags": [
+          "FeaturesFlagsController"
+        ],
+        "responses": {
+          "200": {
+            "description": "FeaturesFlags instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeaturesFlagsWithRelations"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeaturesFlags.Filter"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "FeaturesFlagsController.findById"
+      },
+      "delete": {
+        "x-controller-name": "FeaturesFlagsController",
+        "x-operation-name": "deleteById",
+        "tags": [
+          "FeaturesFlagsController"
+        ],
+        "responses": {
+          "204": {
+            "description": "FeaturesFlags was deleted"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "FeaturesFlagsController.deleteById"
+      }
+    },
+    "/features-flags": {
+      "post": {
+        "x-controller-name": "FeaturesFlagsController",
+        "x-operation-name": "create",
+        "tags": [
+          "FeaturesFlagsController"
+        ],
+        "responses": {
+          "200": {
+            "description": "FeaturesFlags instance created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeaturesFlags"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewFeaturesFlags"
+              }
+            }
+          }
+        },
+        "operationId": "FeaturesFlagsController.create"
+      },
+      "patch": {
+        "x-controller-name": "FeaturesFlagsController",
+        "x-operation-name": "updateAll",
+        "tags": [
+          "FeaturesFlagsController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Count of FeaturesFlags models updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "FeaturesFlags.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<FeaturesFlags>"
+                }
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeaturesFlagsPartial"
+              }
+            }
+          }
+        },
+        "operationId": "FeaturesFlagsController.updateAll"
+      },
+      "get": {
+        "x-controller-name": "FeaturesFlagsController",
+        "x-operation-name": "find",
+        "tags": [
+          "FeaturesFlagsController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of FeaturesFlags instances",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FeaturesFlagsWithRelations"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeaturesFlags.Filter1"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "FeaturesFlagsController.find"
+      }
+    },
+    "/ping": {
+      "get": {
+        "x-controller-name": "PingController",
+        "x-operation-name": "ping",
+        "tags": [
+          "PingController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ping Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PingResponse"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "PingController.ping"
+      }
+    },
+    "/users/count": {
+      "get": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "count",
+        "tags": [
+          "UserController"
+        ],
+        "responses": {
+          "200": {
+            "description": "User count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "User.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<User>"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "UserController.count"
+      }
+    },
+    "/users/{id}": {
+      "put": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "replaceById",
+        "tags": [
+          "UserController"
+        ],
+        "responses": {
+          "204": {
+            "description": "User was updated"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "UserController.replaceById"
+      },
+      "patch": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "updateById",
+        "tags": [
+          "UserController"
+        ],
+        "responses": {
+          "204": {
+            "description": "User was updated"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserPartial"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "UserController.updateById"
+      },
+      "get": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "findById",
+        "tags": [
+          "UserController"
+        ],
+        "responses": {
+          "200": {
+            "description": "User instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserWithRelations"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User.Filter"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "UserController.findById"
+      },
+      "delete": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "deleteById",
+        "tags": [
+          "UserController"
+        ],
+        "responses": {
+          "204": {
+            "description": "User was deleted"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "UserController.deleteById"
+      }
+    },
+    "/users": {
+      "post": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "create",
+        "tags": [
+          "UserController"
+        ],
+        "responses": {
+          "200": {
+            "description": "User instance created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewUser"
+              }
+            }
+          }
+        },
+        "operationId": "UserController.create"
+      },
+      "patch": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "updateAll",
+        "tags": [
+          "UserController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Count of User models updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "User.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<User>"
+                }
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserPartial"
+              }
+            }
+          }
+        },
+        "operationId": "UserController.updateAll"
+      },
+      "get": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "find",
+        "tags": [
+          "UserController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of User instances",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserWithRelations"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User.Filter1"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "UserController.find"
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "FeaturesFlags": {
+        "title": "FeaturesFlags",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "flagKey": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "enabled"
+        ],
+        "additionalProperties": false
+      },
+      "NewFeaturesFlags": {
+        "title": "NewFeaturesFlags",
+        "description": "(tsType: Omit<FeaturesFlags, 'id'>, schemaOptions: { title: 'NewFeaturesFlags', exclude: [ 'id' ] })",
+        "properties": {
+          "flagKey": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "enabled"
+        ],
+        "additionalProperties": false,
+        "x-typescript-type": "Omit<FeaturesFlags, 'id'>"
+      },
+      "FeaturesFlagsWithRelations": {
+        "title": "FeaturesFlagsWithRelations",
+        "description": "(tsType: FeaturesFlagsWithRelations, schemaOptions: { includeRelations: true })",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "flagKey": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "enabled"
+        ],
+        "additionalProperties": false,
+        "x-typescript-type": "FeaturesFlagsWithRelations"
+      },
+      "FeaturesFlagsPartial": {
+        "title": "FeaturesFlagsPartial",
+        "description": "(tsType: Partial<FeaturesFlags>, schemaOptions: { partial: true })",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "flagKey": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "Partial<FeaturesFlags>"
+      },
+      "User": {
+        "title": "User",
+        "properties": {
+          "umId": {
+            "type": "number"
+          },
+          "umUserName": {
+            "type": "string"
+          },
+          "umUserPassword": {
+            "type": "string"
+          },
+          "umSaltValue": {
+            "type": "string"
+          },
+          "umRequireChange": {
+            "type": "boolean"
+          },
+          "umChangedTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "umTenantId": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": false
+      },
+      "NewUser": {
+        "title": "NewUser",
+        "description": "(tsType: Omit<User, 'umId'>, schemaOptions: { title: 'NewUser', exclude: [ 'umId' ] })",
+        "properties": {
+          "umUserName": {
+            "type": "string"
+          },
+          "umUserPassword": {
+            "type": "string"
+          },
+          "umSaltValue": {
+            "type": "string"
+          },
+          "umRequireChange": {
+            "type": "boolean"
+          },
+          "umChangedTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "umTenantId": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "Omit<User, 'umId'>"
+      },
+      "UserWithRelations": {
+        "title": "UserWithRelations",
+        "description": "(tsType: UserWithRelations, schemaOptions: { includeRelations: true })",
+        "properties": {
+          "umId": {
+            "type": "number"
+          },
+          "umUserName": {
+            "type": "string"
+          },
+          "umUserPassword": {
+            "type": "string"
+          },
+          "umSaltValue": {
+            "type": "string"
+          },
+          "umRequireChange": {
+            "type": "boolean"
+          },
+          "umChangedTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "umTenantId": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "UserWithRelations"
+      },
+      "UserPartial": {
+        "title": "UserPartial",
+        "description": "(tsType: Partial<User>, schemaOptions: { partial: true })",
+        "properties": {
+          "umId": {
+            "type": "number"
+          },
+          "umUserName": {
+            "type": "string"
+          },
+          "umUserPassword": {
+            "type": "string"
+          },
+          "umSaltValue": {
+            "type": "string"
+          },
+          "umRequireChange": {
+            "type": "boolean"
+          },
+          "umChangedTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "umTenantId": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "Partial<User>"
+      },
+      "loopback.Count": {
+        "type": "object",
+        "title": "loopback.Count",
+        "x-typescript-type": "@loopback/repository#Count",
+        "properties": {
+          "count": {
+            "type": "number"
+          }
+        }
+      },
+      "FeaturesFlags.Fields": {
+        "title": "FeaturesFlags.Fields",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "boolean"
+          },
+          "flagKey": {
+            "type": "boolean"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "FeaturesFlags.Filter": {
+        "type": "object",
+        "title": "FeaturesFlags.Filter",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "$ref": "#/components/schemas/FeaturesFlags.Fields"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository#Filter<FeaturesFlags>"
+      },
+      "FeaturesFlags.Filter1": {
+        "type": "object",
+        "title": "FeaturesFlags.Filter",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "where": {
+            "title": "FeaturesFlags.WhereFilter",
+            "type": "object",
+            "additionalProperties": true
+          },
+          "fields": {
+            "$ref": "#/components/schemas/FeaturesFlags.Fields"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository#Filter<FeaturesFlags>"
+      },
+      "PingResponse": {
+        "type": "object",
+        "title": "PingResponse",
+        "properties": {
+          "greeting": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "headers": {
+            "type": "object",
+            "properties": {
+              "Content-Type": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "User.Fields": {
+        "title": "User.Fields",
+        "type": "object",
+        "properties": {
+          "umId": {
+            "type": "boolean"
+          },
+          "umUserName": {
+            "type": "boolean"
+          },
+          "umUserPassword": {
+            "type": "boolean"
+          },
+          "umSaltValue": {
+            "type": "boolean"
+          },
+          "umRequireChange": {
+            "type": "boolean"
+          },
+          "umChangedTime": {
+            "type": "boolean"
+          },
+          "umTenantId": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "User.Filter": {
+        "type": "object",
+        "title": "User.Filter",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "$ref": "#/components/schemas/User.Fields"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository#Filter<User>"
+      },
+      "User.Filter1": {
+        "type": "object",
+        "title": "User.Filter",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "where": {
+            "title": "User.WhereFilter",
+            "type": "object",
+            "additionalProperties": true
+          },
+          "fields": {
+            "$ref": "#/components/schemas/User.Fields"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository#Filter<User>"
+      }
+    }
+  }
+}

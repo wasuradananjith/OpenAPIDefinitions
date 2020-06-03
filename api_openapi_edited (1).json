@@ -1,0 +1,1235 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Contact Management API",
+    "description": "## Ambiente de Homologação",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/v1/geography/address": {
+      "get": {
+        "tags": [
+          "Address"
+        ],
+        "summary": "Obter informações de um Endereço a partir de um CEP",
+        "description": "Utilizando um CEP podemos obter as informações de um Endereço.\r\nPor se tratar de busca por CEP, não é possível obter valores como número e complemento,\r\nportanto não serão retornados. \r\n\r\n**DICA**: Utilize este endpoint para auxiliar no preenchimento de formulários na aplicação.\r\n\r\n<span style=\"font-size:.8em; color:#e39b54\">*Para este endpoint estamos utilizando a API Via CEP*.</span>",
+        "parameters": [
+          {
+            "name": "AccountId",
+            "in": "header",
+            "description": "Id da conta Uzzipay.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Id da conta Uzzipay.",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "zipCode",
+            "in": "query",
+            "description": "CEP (8 dígitos, sem utilizar pontos ou traços).",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "CEP (8 dígitos, sem utilizar pontos ou traços)."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Informações do endereço encontrado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddressIntegrationResponseDTOResponseTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Filtro não retorna contato.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseErrorTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erros de Entrada de Dados.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseErrorTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erros Internos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseInternalErrorTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/contact": {
+      "post": {
+        "tags": [
+          "Contact"
+        ],
+        "summary": "Criar Contato.",
+        "description": "Cria uma nova Pessoa, que é um cliente de um cliente Uzzipay. Tendo as seguintes\r\ncaracterísticas.\r\n\r\n* Esta é a pessoa que será cobrada por nossos clientes.\r\n* O contato pode ser tanto pessoa física quanto jurídica.\r\n* Os contatos tem CPF / CNPJ único por cliente, portanto é possível o mesmo CPF / CNPJ\r\nestar cadastrado mais de uma vez no banco de dados, porém apenas uma vez\r\npara cada cliente.\r\n* Todas as alterações de informações de contatos são únicas por cliente.\r\n* **Campos como Endereço, Emails e Telefones são opcionais. Porém a inserção de informações\r\nerradas nestes campos fará com que a requisição falhe.**\r\n* **Não é possível criar um contato com CPF / CNPJ já cadastrados por este cliente Uzzipay, mesmo que \r\neste campo esteja cadastrado em usuário desativado.**\r\n\r\n**Modelo de dados do corpo da requisição**\r\n\r\n|Parâmetro|||Obrigatório|Tipo|Descrição|\r\n|---|---|---|:---:|:--:|---|\r\n|**name**|||✔️|<span style=\"color:purple\">string</span><br />**Tamanho Máximo**: 100|Nome completo do contato.|\r\n|**taxId**|||✔️|<span style=\"color:purple\">string</span><br />**Tamanho CPF**: 11<br />**Tamanho CNPJ**: 14|CPF ou CNPJ do contato. *Apenas os números, sem formatação*.|\r\n|||||\r\n|**address**|||❌|<span style=\"color:darkblue\">object</span>|Endereço de cobrança do contato. *Abaixo os campos que devem ser utilizados neste objeto*.|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**number**||✔️|<span style=\"color:purple\">string</span><br />**Tamanho Máximo**: 50|Número do endereço. *Está em formato string por conta de endereços que possuem letras junto de números*.|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**complement**||❌|<span style=\"color:purple\">string</span><br />**Tamanho Máximo**: 50|Complemento do endereço. *Informações de apartamento, bloco etc...*|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**zipCode**||✔️|<span style=\"color:purple\">string</span><br />**Tamanho**: 8|Código do CEP. *Apenas os números, sem formatação*.|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**street**||✔️|<span style=\"color:purple\">string</span><br />**Tamanho Máximo**: 100|Logradouro deste endereço. *Rua, Avenida etc...*|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**neighboorhod**||❌|<span style=\"color:purple\">string</span><br />**Tamanho Máximo**: 50|Bairro.|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**city**||❌|<span style=\"color:purple\">string</span><br />**Tamanho Máximo**: 50|Cidade.|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**state**||❌|<span style=\"color:purple\">string</span><br />**Tamanho**: 2|Sigla do Estado. ***Dica:** Utilize os endpoints de estado para obter estas siglas.*|\r\n|||||\r\n|**phones**|||❌|<span style=\"color:darkgreen\">Array(<span style=\"color:darkblue\">object</span>)</span>|Lista de telefones deste contato. *Abaixo os campos que devem ser utilizados para cada objeto desta lista*.|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**type**||❌|<span style=\"color:purple\">string</span><br />**Tamanho Máximo**: 255|Qualificador do contato. Por exemplo: *Casa, Celular, Trabalho etc...*|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**contactMethod**||✔️|<span style=\"color:blue\">integer</span><br />|Identificador dos métodos de contato disponíveis. *SMS ou Whatsapp*.|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**number**||✔️|<span style=\"color:blue\">integer</span><br />|Número para contato. *Sem DDI ou DDD, mas com primeiro dígito, caso a região possua 9 dígitos no telefone.*|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**ddi**||✔️|<span style=\"color:blue\">integer</span><br />|Cógido do País. *No caso do Brasil: 55*.|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**ddi**||✔️|<span style=\"color:blue\">integer</span><br />**Dígitos**: 2|Cógido do Estado.|\r\n|||||\r\n|**emails**|||❌|<span style=\"color:darkgreen\">Array(<span style=\"color:purple\">string</span>)</span>|Lista de emails deste contato.|",
+        "parameters": [
+          {
+            "name": "AccountId",
+            "in": "header",
+            "description": "Identificador da conta Uzzipay.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Identificador da conta Uzzipay.",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados do Contato a ser criado.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContactRequestDTO"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContactRequestDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContactRequestDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContactRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Informações do contato criado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactResponseDTOResponseTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erros de entrada de dados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseErrorTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erros internos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseInternalErrorTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Contact"
+        ],
+        "summary": "Listar Contatos | Obter um contato pelo CPF / CNPJ.",
+        "description": "Caso não sejam passados filtros de propriedades únicas, retorna uma lista paginada de Pessoas cadastradas\r\npelos clientes Uzzipay. Para navegar por esta lista é possível passar como parâmetro (via query string) qual\r\na página e seu tamanho.\r\nQuando pesquisados por filtro único, como apenas uma entidade será retornada, então esta resposta não terá\r\ndados de paginação.\r\n\r\n<span style=\"font-size:.8em; color:#e39b54\">*Não utilize os parâmetros de filtros únicos junto dos parâmetros de paginação*.</span><span style=\"font-size:.8em; color:#e39b54\">*Não é possível obter contatos desativados*.</span>\r\n\r\n**Filtros únicos disponíveis** (informar via query string):\r\n|Filtro|Formato|Descrição|\r\n|---|:---:|---|\r\n|**taxId**|Série de dígitos, sem formatação.<br />**Tamanho CPF**: 11<br />**Tamanho CNPJ**: 14|CPF / CNPJ de algum contato cadastrado pelo cliente Uzzipay.|",
+        "parameters": [
+          {
+            "name": "AccountId",
+            "in": "header",
+            "description": "Identificador da conta Uzzipay.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Identificador da conta Uzzipay.",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "taxId",
+            "in": "query",
+            "description": "CPF ou CNPJ da Pessoa a ser buscada.",
+            "schema": {
+              "type": "string",
+              "description": "CPF ou CNPJ da Pessoa a ser buscada.",
+              "nullable": true
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número da página a ser acessada (começando do 1).",
+            "schema": {
+              "type": "integer",
+              "description": "Número da página a ser acessada (começando do 1).",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Quantidade de Pessoas que serão listadas por página.",
+            "schema": {
+              "type": "integer",
+              "description": "Quantidade de Pessoas que serão listadas por página.",
+              "format": "int32",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Informações do(s) Contato(s) encontrado(s).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactResponseDTOPaginatedResponseTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Filtro não retorna contato.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseErrorTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erros de Entrada de Dados.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseErrorTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erros Internos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseInternalErrorTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/contact/{id}": {
+      "get": {
+        "tags": [
+          "Contact"
+        ],
+        "summary": "Obter Contato por Id.",
+        "description": "Através do identificador único do Contato, é possível obter seus dados. *Dica: é possível obter este identificador na\r\nresposta da criação de um contato ou na busca por lista paginada*.\r\n\r\n<span style=\"font-size:.8em; color:#e39b54\">*Não é possível obter contatos desativados*.</span>",
+        "parameters": [
+          {
+            "name": "AccountId",
+            "in": "header",
+            "description": "Identificador da conta Uzzipay.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Identificador da conta Uzzipay.",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único do Contato.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Identificador único do Contato.",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Informações do Contato encontrado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactResponseDTOResponseTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Filtro não retorna contato.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseErrorTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erros de Entrada de Dados.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseErrorTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erros Internos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseInternalErrorTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Contact"
+        ],
+        "summary": "Editar informação do Contato por Id.",
+        "description": "Através do identificador único do Contato é possível alterar apenas os campos desejados. *Vale ressaltar \r\nalguns detalhes com relação a esta atualização*.\r\n\r\n* Listas, como telefone e emails serão completamente modificadas pelas enviadas nesta requisição.\r\n* É possível modificar CPF / CNPJ, isso vai alterar o filtro de busca por este campo.\r\n* Não é possível ativar ou desativar Contato por este método.\r\n* Só é possível atualizar os dados de um contato ativado.\r\n\r\n<span style=\"font-size:.8em; color:#e39b54\">*Não é possível editar contatos desativados*.</span>\r\n\r\n **Modelo de dados do corpo da requisição**\r\n\r\n|Parâmetro|||Obrigatório|Tipo|Descrição|\r\n|---|---|---|:---:|:--:|---|\r\n|**name**|||❌|<span style=\"color:purple\">string</span><br />**Tamanho Máximo**: 100|Nome completo do contato.|\r\n|**taxId**|||❌|<span style=\"color:purple\">string</span><br />**Tamanho CPF**: 11<br />**Tamanho CNPJ**: 14|CPF ou CNPJ do contato. *Apenas os números, sem formatação*.|\r\n|||||\r\n|**address**|||❌|<span style=\"color:darkblue\">object</span>|Endereço de cobrança do contato. *Abaixo os campos que devem ser utilizados neste objeto*.|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**number**||❌|<span style=\"color:purple\">string</span><br />**Tamanho Máximo**: 50|Número do endereço. *Está em formato string por conta de endereços que possuem letras junto de números*.|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**complement**||❌|<span style=\"color:purple\">string</span><br />**Tamanho Máximo**: 50|Complemento do endereço. *Informações de apartamento, bloco etc...*|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**zipCode**||❌|<span style=\"color:purple\">string</span><br />**Tamanho**: 8|Código do CEP. *Apenas os números, sem formatação*.|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**street**||❌|<span style=\"color:purple\">string</span><br />**Tamanho Máximo**: 100|Logradouro deste endereço. *Rua, Avenida etc...*|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**neighboorhod**||❌|<span style=\"color:purple\">string</span><br />**Tamanho Máximo**: 50|Bairro.|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**city**||❌|<span style=\"color:purple\">string</span><br />**Tamanho Máximo**: 50|Cidade.|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**state**||❌|<span style=\"color:purple\">string</span><br />**Tamanho**: 2|Sigla do Estado. ***Dica:** Utilize os endpoints de estado para obter estas siglas.*|\r\n|||||\r\n|**phones**|||❌|<span style=\"color:darkgreen\">Array(<span style=\"color:darkblue\">object</span>)</span>|Lista de telefones deste contato. *Abaixo os campos que devem ser utilizados para cada objeto desta lista*.|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**type**||❌|<span style=\"color:purple\">string</span><br />**Tamanho Máximo**: 255|Qualificador do contato. Por exemplo: *Casa, Celular, Trabalho etc...*|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**contactMethod**||✔️|<span style=\"color:blue\">integer</span><br />|Identificador dos métodos de contato disponíveis. *SMS ou Whatsapp*.|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**number**||✔️|<span style=\"color:blue\">integer</span><br />|Número para contato. *Sem DDI ou DDD, mas com primeiro dígito, caso a região possua 9 dígitos no telefone.*|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**ddi**||✔️|<span style=\"color:blue\">integer</span><br />|Cógido do País. *No caso do Brasil: 55*.|\r\n|<div style=\"width: 100%; text-align: center\">►</div>|**ddi**||✔️|<span style=\"color:blue\">integer</span><br />**Dígitos**: 2|Cógido do Estado.|\r\n|||||\r\n|**emails**|||❌|<span style=\"color:darkgreen\">Array(<span style=\"color:purple\">string</span>)</span>|Lista de emails deste contato.|",
+        "parameters": [
+          {
+            "name": "AccountId",
+            "in": "header",
+            "description": "Autorização (Bearer Token)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Autorização (Bearer Token)",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único no formato GUID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Identificador único no formato GUID",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados do Contato a ser editado",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContactRequestDTO"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContactRequestDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContactRequestDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContactRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Informações do Contato após modificação.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactResponseDTOResponseTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Filtro não retorna contato.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseErrorTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erros de Entrada de Dados.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseErrorTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erros Internos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseInternalErrorTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/contact/{id}/disable": {
+      "put": {
+        "tags": [
+          "Contact"
+        ],
+        "summary": "Desativar Pessoa por Id.",
+        "description": "Através do identificador único do Contato, é possível desativá-lo. *Dica: é possível obter este identificador na\r\nresposta da criação de um contato ou na busca por lista paginada*.",
+        "parameters": [
+          {
+            "name": "AccountId",
+            "in": "header",
+            "description": "Identificador da conta Uzzipay.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Identificador da conta Uzzipay.",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único do Contato.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Identificador único do Contato.",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Informações do Contato após modificação.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactResponseDTOResponseTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Filtro não retorna contato.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseErrorTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erros de Entrada de Dados.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseErrorTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erros Internos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseInternalErrorTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/contact/{id}/enable": {
+      "put": {
+        "tags": [
+          "Contact"
+        ],
+        "summary": "Ativar Pessoa por Id.",
+        "description": "Através do identificador único do Contato, é possível ativá-lo. *Dica: é possível obter este identificador na\r\nresposta da criação de um contato ou na busca por lista paginada*.",
+        "parameters": [
+          {
+            "name": "AccountId",
+            "in": "header",
+            "description": "Identificador da conta Uzzipay.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Identificador da conta Uzzipay.",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador único do Contato.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Identificador único do Contato.",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Informações do Contato após modificação.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactResponseDTOResponseTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Filtro não retorna contato.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseErrorTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erros de Entrada de Dados.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseErrorTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erros Internos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseInternalErrorTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/geography/states": {
+      "get": {
+        "tags": [
+          "States"
+        ],
+        "summary": "Obter lista dos estados brasileiros.",
+        "description": "Retorna uma lista paginada dos estados brasileiros. Por padrão a lista tem tamanho de página 30, o suficiente para retornar todos\r\nos estados. É possível mudar a página e a quantidade de entradas por página a partir de sua query string. Além disso também é possível\r\nfiltrar os estados por região, bastando passar como query string apenas sua sigla.\r\n\r\n<span style=\"font-size:.8em; color:#e39b54\">*Para este endpoint estamos utilizando a API do IBGE*.</span>\r\n\r\n**Siglas Aceitas**\r\n\r\n|Região|Sigla|\r\n|---|---|\r\n|Norte|**N**|\r\n|Nordeste|**NE**|\r\n|Centro Oeste|**CO**|\r\n|Sudeste|**SE**|\r\n|Sul|**S**|",
+        "parameters": [
+          {
+            "name": "AccountId",
+            "in": "header",
+            "description": "ID do Cliente Uzzipay.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "ID do Cliente Uzzipay.",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "regionAbbreviation",
+            "in": "query",
+            "description": "Sigla da região.",
+            "schema": {
+              "type": "string",
+              "description": "Sigla da região.",
+              "nullable": true
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Página da lista.",
+            "schema": {
+              "type": "integer",
+              "description": "Página da lista.",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Entradas por página.",
+            "schema": {
+              "type": "integer",
+              "description": "Entradas por página.",
+              "format": "int32",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de estados.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StateDTOPaginatedResponseTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Filtro não retorna contato.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseErrorTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erros de Entrada de Dados.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseErrorTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erros Internos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseInternalErrorTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/geography/{regionAbbreviation}/states": {
+      "get": {
+        "tags": [
+          "States"
+        ],
+        "summary": "Obter todos os estados de uma região brasileira.",
+        "description": "Retorna as informações de uma região, contendo nome, sigla e lista de estados. A lista não é pagina e contém apenas\r\nos estados daquela região. Apenas uma região é retornada. É necessário informar a região na rota da requisição.\r\n\r\n<span style=\"font-size:.8em; color:#e39b54\">*Para este endpoint estamos utilizando a API do IBGE*.</span>\r\n\r\n**Siglas Aceitas**\r\n\r\n|Região|Sigla|\r\n|---|---|\r\n|Norte|**N**|\r\n|Nordeste|**NE**|\r\n|Centro Oeste|**CO**|\r\n|Sudeste|**SE**|\r\n|Sul|**S**|",
+        "parameters": [
+          {
+            "name": "AccountId",
+            "in": "header",
+            "description": "ID do Cliente Uzzipay.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "ID do Cliente Uzzipay.",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "regionAbbreviation",
+            "in": "path",
+            "description": "Código da região.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Código da região."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados da região, com seus estados.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegionDTOResponseTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Filtro não retorna contato.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseErrorTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erros de Entrada de Dados.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseErrorTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erros Internos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseInternalErrorTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AddressIntegrationResponseDTO": {
+        "type": "object",
+        "properties": {
+          "zipCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "street": {
+            "type": "string",
+            "nullable": true
+          },
+          "neighboorhod": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": {
+            "type":"boolean",
+            "default": false
+        }
+      },
+      "AddressIntegrationResponseDTOResponseTO": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/AddressIntegrationResponseDTO"
+          }
+        },
+        "additionalProperties": {
+            "type":"boolean",
+            "default": false
+        }
+      },
+      "ValidationErrorTO": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": {
+            "type":"boolean",
+            "default": false
+        }
+      },
+      "ResponseErrorTO": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ValidationErrorTO"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": {
+            "type":"boolean",
+            "default": false
+        }
+      },
+      "ResponseInternalErrorTO": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "traceId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": {
+            "type":"boolean",
+            "default": false
+        }
+      },
+      "AddressRequestDTO": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "string",
+            "nullable": true
+          },
+          "complement": {
+            "type": "string",
+            "nullable": true
+          },
+          "zipCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "street": {
+            "type": "string",
+            "nullable": true
+          },
+          "neighboorhod": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": {
+            "type":"boolean",
+            "default": false
+        }
+      },
+      "ContactMethod": {
+        "enum": [
+          "sms",
+          "whatsapp",
+          "telegram"
+        ],
+        "type": "string"
+      },
+      "TelephoneRequestDTO": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "contactMethod": {
+            "$ref": "#/components/schemas/ContactMethod"
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ddi": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ddd": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": {
+            "type":"boolean",
+            "default": false
+        }
+      },
+      "ContactRequestDTO": {
+        "type": "object",
+        "properties": {
+          "taxId": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressRequestDTO"
+          },
+          "phones": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TelephoneRequestDTO"
+            },
+            "nullable": true
+          },
+          "emails": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": {
+            "type":"boolean",
+            "default": false
+        }
+      },
+      "PersonType": {
+        "enum": [
+          "PF",
+          "PJ"
+        ],
+        "type": "string"
+      },
+      "CustomerDTO": {
+        "type": "object",
+        "properties": {
+          "taxId": {
+            "type": "string",
+            "nullable": true
+          },
+          "personType": {
+            "$ref": "#/components/schemas/PersonType"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": {
+            "type":"boolean",
+            "default": false
+        }
+      },
+      "AddressDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "number": {
+            "type": "string",
+            "nullable": true
+          },
+          "complement": {
+            "type": "string",
+            "nullable": true
+          },
+          "zipCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "street": {
+            "type": "string",
+            "nullable": true
+          },
+          "neighboorhod": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": {
+            "type":"boolean",
+            "default": false
+        }
+      },
+      "TelephoneDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "contactMethod": {
+            "$ref": "#/components/schemas/ContactMethod"
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ddi": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ddd": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": {
+            "type":"boolean",
+            "default": false
+        }
+      },
+      "ContactResponseDTO": {
+        "type": "object",
+        "properties": {
+          "taxId": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "customer": {
+            "$ref": "#/components/schemas/CustomerDTO"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressDTO"
+          },
+          "phones": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TelephoneDTO"
+            },
+            "nullable": true
+          },
+          "emails": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "personType": {
+            "$ref": "#/components/schemas/PersonType"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": {
+            "type":"boolean",
+            "default": false
+        }
+      },
+      "ContactResponseDTOResponseTO": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ContactResponseDTO"
+          }
+        },
+        "additionalProperties": {
+            "type":"boolean",
+            "default": false
+        }
+      },
+      "PageTO": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": {
+            "type":"boolean",
+            "default": false
+        }
+      },
+      "ContactResponseDTOPaginatedResponseTO": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "$ref": "#/components/schemas/PageTO"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContactResponseDTO"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": {
+            "type":"boolean",
+            "default": false
+        }
+      },
+      "StateDTO": {
+        "type": "object",
+        "properties": {
+          "abbreviation": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionAbbreviation": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": {
+            "type":"boolean",
+            "default": false
+        }
+      },
+      "StateDTOPaginatedResponseTO": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "$ref": "#/components/schemas/PageTO"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StateDTO"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": {
+            "type":"boolean",
+            "default": false
+        }
+      },
+      "RegionDTO": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "abbreviation": {
+            "type": "string",
+            "nullable": true
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StateDTO"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": {
+            "type":"boolean",
+            "default": false
+        }
+      },
+      "RegionDTOResponseTO": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/RegionDTO"
+          }
+        },
+        "additionalProperties": {
+            "type":"boolean",
+            "default": false
+        }
+      }
+    }
+  }
+}
